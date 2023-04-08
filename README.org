@@ -1,0 +1,68 @@
+#+TITLE: My Emacs Config
+
+This is my Emacs config. I had an old one, but it was getting
+out of hand, so I decided to declare Emacs bankruptcy, and
+well, here we are now.
+
+** Prerequisites
+This config works with Emacs 30. Here are the features that
+the Emacs this config is meant for was compiled with:
+
+ - CAIRO
+ - DBUS
+ - FREETYPE
+ - GIF
+ - GLIB
+ - GMP
+ - GNUTLS
+ - GSETTINGS
+ - HARFBUZZ
+ - JPEG
+ - LCMS2
+ - LIBSELINUX
+ - LIBXML2
+ - MODULES
+ - NOTIFY
+ - INOTIFY
+ - PDUMPER
+ - PNG
+ - RSVG
+ - SECCOMP
+ - SOUND
+ - THREADS
+ - TIFF
+ - TOOLKIT_SCROLL_BARS
+ - TREE_SITTER
+ - X11
+ - XDBE
+ - XIM
+ - XINPUT2
+ - XPM
+ - GTK3
+ - ZLIB
+
+It might also be helpful to install the treesitter parser shared
+objects.
+
+** FAQ
+*** Why use outline mode over org mode?
+I've had problems with org mode when using it to configure
+Emacs over the years. Admittedly, it was probably my fault
+because I installed a new version of org mode that came in
+conflict with the preinstalled version of org mode, which,
+as you might imagine, caused my Emacs config to break. I
+feel that using outshine mode makes it less likely for that
+kind of thing to happen.
+
+** Conventions used
+As common with all Emacs configs, initials are prepended to
+the beginning of functions to avoid namespace conflicts. 
+
+** Acknowledgements
+
+I would like to acknowledge the following people for providing
+inspiration for setting up my Emacs config:
+
+ - [[https://github.com/jwiegley][John Wiegley]]
+ - [[https://github.com/abo-abo][Abo Abo]]
+ - [[https://github.com/daedreth][Uncle Dave]]

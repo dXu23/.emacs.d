@@ -12,21 +12,6 @@
 
 
 
-;;; Generated autoloads from gtd.el
-
-(register-definition-prefixes "gtd" '("cmp-date-property-stamp"))
-
-
-;;; Generated autoloads from modes/java.el
-
-(autoload 'java-hook "modes/java")
-
-
-;;; Generated autoloads from modes/jvm.el
-
-(register-definition-prefixes "modes/jvm" '("javap-handler"))
-
-
 ;;; Generated autoloads from modes/c.el
 
 (autoload 'c-ts-setup "modes/c" "\
@@ -34,14 +19,29 @@ Sets up Treesitter for C.")
 (register-definition-prefixes "modes/c" '("find-header-files"))
 
 
-;;; Generated autoloads from org-settings.el
+;;; Generated autoloads from modes/java.el
 
-(register-definition-prefixes "org-settings" '("gtd-save-org-buffers" "log-todo-next-creation-date" "org-capture-"))
+(autoload 'my/java-hook "modes/java")
 
 
-;;; Generated autoloads from modes/ruby.el
+;;; Generated autoloads from modes/jvm.el
 
-(autoload 'dx-ruby-hook "modes/ruby")
+(register-definition-prefixes "modes/jvm" '("javap-handler"))
+
+
+;;; Generated autoloads from org-settings.el
+
+(register-definition-prefixes "org-settings" '("build-exercise-data" "get-exercise" "gtd-save-org-buffers" "log-todo-next-creation-date" "org-capture-" "output-exercise-table-for-buffer"))
+
+
+;;; Generated autoloads from modes/python-mode.el
+
+(autoload 'python-hook "modes/python-mode")
+
+
+;;; Generated autoloads from modes/scheme-mode.el
+
+(autoload 'my/scheme-hook "modes/scheme-mode")
 
 ;;; End of scraped data
 

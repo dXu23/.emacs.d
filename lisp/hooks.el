@@ -1,5 +1,5 @@
-(add-hook 'java-mode-hook 'java-hook)
+(add-hook 'java-mode-hook 'my/java-hook)
+(add-hook 'scheme-mode-hook 'my/scheme-hook)
 (add-hook 'c-ts-mode-hook #'c-ts-setup)
-(add-hook 'ruby-mode-hook #'dx-ruby-hook)
 
 (provide 'hooks)

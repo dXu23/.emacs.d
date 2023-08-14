@@ -6,6 +6,15 @@
 ;; a filetype (e.g. Vertico). Modes will be stored in /lisp/modes,
 ;; with extensions/settings associated with built-in packages in
 ;; /lisp (e.g. /lisp/org-settings.el).
+;;
+;; The following keystrokes may be useful for navigating the config
+;; file:
+;; C-c C-@ C-t : Fold text under subheadings
+;; C-c C-@ C-a : Reveal text under subheadings
+;; C-c C-@ C-n : Move to next visible heading
+;; C-c C-@ C-p : Move to previous visible heading
+;; C-c C-@ C-f : Move to next heading on same level
+;; C-c C-@ C-p : Move to previous heading on same level
 
 ;;; Code:
 (require 'seq)
@@ -75,6 +84,9 @@
 (setq switch-to-buffer-in-dedicated-window 'pop
       switch-to-buffer-obey-display-actions t)
 
+;;; Add extra functionality to isearch
+(defun isearch-forward-other-window (prefix)
+  "Function to isearch-forward in other-window.")
 
 ;; Relative line numbers
 (require 'display-line-numbers)
@@ -146,6 +158,7 @@ Exempt modes are defined in `display-line-numbers-exempt-modes'."
 		  mode-line-modes
 		  mode-line-misc-info
 		  mode-line-end-spaces))
+
 
 ;;; load modus theme
 (setq modus-themes-mode-line '(accented borderless padded)
@@ -298,96 +311,97 @@ The expansion is a string indicating the package has been disabled."
 			 :init (leaf-keywords-init)))
 
 ;;;; Meow for vim-like key bindings
-(elpaca-leaf meow
-  :config
-  (defun meow-setup ()
-    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
-    (meow-motion-overwrite-define-key
-     '("j" . meow-next)
-     '("k" . meow-prev)
-     '("<escape>" . ignore))
-    (meow-leader-define-key
-     ;; SPC j/k will run the original command in MOTION state.
-     '("j" . "H-j")
-     '("k" . "H-k")
-     ;; Use SPC (0-9) for digit arguments.
-     '("1" . meow-digit-argument)
-     '("2" . meow-digit-argument)
-     '("3" . meow-digit-argument)
-     '("4" . meow-digit-argument)
-     '("5" . meow-digit-argument)
-     '("6" . meow-digit-argument)
-     '("7" . meow-digit-argument)
-     '("8" . meow-digit-argument)
-     '("9" . meow-digit-argument)
-     '("0" . meow-digit-argument)
-     '("/" . meow-keypad-describe-key)
-     '("?" . meow-cheatsheet))
-    (meow-normal-define-key
-     '("0" . meow-expand-0)
-     '("9" . meow-expand-9)
-     '("8" . meow-expand-8)
-     '("7" . meow-expand-7)
-     '("6" . meow-expand-6)
-     '("5" . meow-expand-5)
-     '("4" . meow-expand-4)
-     '("3" . meow-expand-3)
-     '("2" . meow-expand-2)
-     '("1" . meow-expand-1)
-     '("-" . negative-argument)
-     '(";" . meow-reverse)
-     '("," . meow-inner-of-thing)
-     '("." . meow-bounds-of-thing)
-     '("[" . meow-beginning-of-thing)
-     '("]" . meow-end-of-thing)
-     '("a" . meow-append)
-     '("A" . meow-open-below)
-     '("b" . meow-back-word)
-     '("B" . meow-back-symbol)
-     '("c" . meow-change)
-     '("d" . meow-delete)
-     '("D" . meow-backward-delete)
-     '("e" . meow-next-word)
-     '("E" . meow-next-symbol)
-     '("f" . meow-find)
-     '("g" . meow-cancel-selection)
-     '("G" . meow-grab)
-     '("h" . meow-left)
-     '("H" . meow-left-expand)
-     '("i" . meow-insert)
-     '("I" . meow-open-above)
-     '("j" . meow-next)
-     '("J" . meow-next-expand)
-     '("k" . meow-prev)
-     '("K" . meow-prev-expand)
-     '("l" . meow-right)
-     '("L" . meow-right-expand)
-     '("m" . meow-join)
-     '("n" . meow-search)
-     '("o" . meow-block)
-     '("O" . meow-to-block)
-     '("p" . meow-yank)
-     '("q" . meow-quit)
-     '("Q" . meow-goto-line)
-     '("r" . meow-replace)
-     '("R" . meow-swap-grab)
-     '("s" . meow-kill)
-     '("t" . meow-till)
-     '("u" . meow-undo)
-     '("U" . meow-undo-in-selection)
-     '("v" . meow-visit)
-     '("w" . meow-mark-word)
-     '("W" . meow-mark-symbol)
-     '("x" . meow-line)
-     '("X" . meow-goto-line)
-     '("y" . meow-save)
-     '("Y" . meow-sync-grab)
-     '("z" . meow-pop-selection)
-     '("'" . repeat)
-     '("<escape>" . ignore)))
-  (meow-setup)
-  (meow-global-mode 1)
-)
+;; (elpaca-leaf meow
+;;   :require t
+;;   :config
+;;   (defun meow-setup ()
+;;     (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+;;     (meow-motion-overwrite-define-key
+;;      '("j" . meow-next)
+;;      '("k" . meow-prev)
+;;      '("<escape>" . ignore))
+;;     (meow-leader-define-key
+;;      ;; SPC j/k will run the original command in MOTION state.
+;;      '("j" . "H-j")
+;;      '("k" . "H-k")
+;;      ;; Use SPC (0-9) for digit arguments.
+;;      '("1" . meow-digit-argument)
+;;      '("2" . meow-digit-argument)
+;;      '("3" . meow-digit-argument)
+;;      '("4" . meow-digit-argument)
+;;      '("5" . meow-digit-argument)
+;;      '("6" . meow-digit-argument)
+;;      '("7" . meow-digit-argument)
+;;      '("8" . meow-digit-argument)
+;;      '("9" . meow-digit-argument)
+;;      '("0" . meow-digit-argument)
+;;      '("/" . meow-keypad-describe-key)
+;;      '("?" . meow-cheatsheet))
+;;     (meow-normal-define-key
+;;      '("0" . meow-expand-0)
+;;      '("9" . meow-expand-9)
+;;      '("8" . meow-expand-8)
+;;      '("7" . meow-expand-7)
+;;      '("6" . meow-expand-6)
+;;      '("5" . meow-expand-5)
+;;      '("4" . meow-expand-4)
+;;      '("3" . meow-expand-3)
+;;      '("2" . meow-expand-2)
+;;      '("1" . meow-expand-1)
+;;      '("-" . negative-argument)
+;;      '(";" . meow-reverse)
+;;      '("," . meow-inner-of-thing)
+;;      '("." . meow-bounds-of-thing)
+;;      '("[" . meow-beginning-of-thing)
+;;      '("]" . meow-end-of-thing)
+;;      '("a" . meow-append)
+;;      '("A" . meow-open-below)
+;;      '("b" . meow-back-word)
+;;      '("B" . meow-back-symbol)
+;;      '("c" . meow-change)
+;;      '("d" . meow-delete)
+;;      '("D" . meow-backward-delete)
+;;      '("e" . meow-next-word)
+;;      '("E" . meow-next-symbol)
+;;      '("f" . meow-find)
+;;      '("g" . meow-cancel-selection)
+;;      '("G" . meow-grab)
+;;      '("h" . meow-left)
+;;      '("H" . meow-left-expand)
+;;      '("i" . meow-insert)
+;;      '("I" . meow-open-above)
+;;      '("j" . meow-next)
+;;      '("J" . meow-next-expand)
+;;      '("k" . meow-prev)
+;;      '("K" . meow-prev-expand)
+;;      '("l" . meow-right)
+;;      '("L" . meow-right-expand)
+;;      '("m" . meow-join)
+;;      '("n" . meow-search)
+;;      '("o" . meow-block)
+;;      '("O" . meow-to-block)
+;;      '("p" . meow-yank)
+;;      '("q" . meow-quit)
+;;      '("Q" . meow-goto-line)
+;;      '("r" . meow-replace)
+;;      '("R" . meow-swap-grab)
+;;      '("s" . meow-kill)
+;;      '("t" . meow-till)
+;;      '("u" . meow-undo)
+;;      '("U" . meow-undo-in-selection)
+;;      '("v" . meow-visit)
+;;      '("w" . meow-mark-word)
+;;      '("W" . meow-mark-symbol)
+;;      '("x" . meow-line)
+;;      '("X" . meow-goto-line)
+;;      '("y" . meow-save)
+;;      '("Y" . meow-sync-grab)
+;;      '("z" . meow-pop-selection)
+;;      '("'" . repeat)
+;;      '("<escape>" . ignore)))
+;;   (meow-setup)
+;;   (meow-global-mode 1)
+;; )
 
 ;;;; Which key for discovering/remembering key bindings
 (elpaca-leaf which-key
@@ -485,6 +499,33 @@ The expansion is a string indicating the package has been disabled."
   ("M-g w" . avy-goto-word-1)
   ("M-g e" . avy-goto-word-0)
   ("C-c C-j" . avy-resume)
+  :config
+  (defun avy-action-kill-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (kill-whole-line))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t)
+
+  (setf (alist-get ?k avy-dispatch-alist) 'avy-action
+	(alist-get ?K avy-dispatch-alist) 'avy-action-whole-line)
+
+  (defun avy-action-copy-whole-line (pt)
+    (save-excursion
+      (goto-char pt)
+      (pcase-let ((`(start . end) (bounds-of-thing-at-point 'line)))
+	(copy-region-as-kill start end)))
+    (select-window
+     (cdr
+      (ring-ref avy-ring 0)))
+    t)
+
+  (defun avy-action-yank-whole-line (pt)
+    (avy-action-copy-whole-line pt)
+    (save-excursion (yank))
+    t)
   )
 
 ;;;; Magit for git repositories
@@ -533,7 +574,7 @@ The expansion is a string indicating the package has been disabled."
   :bind
   (("C-c n f" . org-roam-node-find)
    ("C-c n r" . org-roam-node-random)
-   (:org-roam-mode-map
+   (:org-mode-map
     ("C-M-i" . completion-at-point)
     ("C-c n i" . org-roam-node-insert)
     ("C-c n o" . org-id-get-create)

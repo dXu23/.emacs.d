@@ -1,6 +1,6 @@
-(elpaca-leaf auctex
+(elpaca-leaf tex
   :defer t
-  :ensure t
+  :ensure auctex
   :config
   (setq TeX-auto-save t))
 

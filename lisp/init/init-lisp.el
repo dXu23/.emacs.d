@@ -2,7 +2,6 @@
   :hook
   ((
     emacs-lisp-mode-hook
-    ielm-mode-hook
     lisp-interaction-mode-hook
     lisp-mode-hook
     scheme-mode-hook

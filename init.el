@@ -159,7 +159,6 @@ Exempt modes are defined in `display-line-numbers-exempt-modes'."
 		  mode-line-misc-info
 		  mode-line-end-spaces))
 
-
 ;;; load modus theme
 (setq modus-themes-mode-line '(accented borderless padded)
       modus-themes-bold-constructs t
@@ -202,7 +201,7 @@ Exempt modes are defined in `display-line-numbers-exempt-modes'."
 ;; 			('darwin "Monaco")
 ;; 			((or 'windows-nt 'cygwin) "Consolas")
 ;; 			(_ "Verdana")))
-;; 	(preferred-fonts '("M+ 1mn" "Terminus" "Hack" "DejaVu Sans Mono" "Fira Code")))
+;; 	(preferred-fonts '("Fira Code" "Terminus" "Hack" "DejaVu Sans Mono" "M+ 1mn")))
 ;;     (if (null (catch 'font-found
 ;; 		(dolist (font preferred-fonts)
 ;; 		  (when (font-available-p font)
@@ -220,7 +219,7 @@ Exempt modes are defined in `display-line-numbers-exempt-modes'."
 (set-face-attribute 'default nil :height 160)
 
 ; Necessary for Emacs client to work.
-(add-to-list 'default-frame-alist '(font . "M+ 1mn 16"))
+(add-to-list 'default-frame-alist '(font . "Terminus (TTF) 16"))
 
 ;;; Regex
 (require 're-builder)
@@ -489,6 +488,36 @@ The expansion is a string indicating the package has been disabled."
   (global-corfu-mode)
   )
 
+;;;; Cape for completion extensions
+(elpaca-leaf cape
+    :bind
+    (("C-c p p" . completion-at-point)
+     ("C-c p t" . complete-tag)
+     ("C-c p h" . cape-history)
+     ("C-c p f" . cape-file)
+     ("C-c p k" . cape-keyword)
+     ("C-c p s" . cape-symbol)
+     ("C-c p a" . cape-abbrev)
+     ("C-c p l" . cape-line)
+     ("C-c p l" . cape-line)
+     ("C-c p w" . cape-dict)
+     ("C-c p \\" . cape-tex)
+     ("C-c ^" . cape-tex)
+     ("C-c p &" . cape-sgml)
+     ("C-c p r" . cape-rfc1345))
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+ )
+
+;;;; Embark
+(elpaca-leaf embark
+    :ensure t
+    :bind
+    (("C-." . embark-act)
+     ))
+
 ;;;; Avy for navigating text
 
 (elpaca-leaf avy
@@ -499,6 +528,8 @@ The expansion is a string indicating the package has been disabled."
   ("M-g w" . avy-goto-word-1)
   ("M-g e" . avy-goto-word-0)
   ("C-c C-j" . avy-resume)
+  :custom
+  `((avy-keys . '(,@(number-sequence ?0 ?9))))
   :config
   (defun avy-action-kill-whole-line (pt)
     (save-excursion
@@ -509,8 +540,8 @@ The expansion is a string indicating the package has been disabled."
       (ring-ref avy-ring 0)))
     t)
 
-  (setf (alist-get ?k avy-dispatch-alist) 'avy-action
-	(alist-get ?K avy-dispatch-alist) 'avy-action-whole-line)
+  (setf (alist-get ?k avy-dispatch-alist) 'avy-action-kill-stay
+	(alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line)
 
   (defun avy-action-copy-whole-line (pt)
     (save-excursion
@@ -526,6 +557,24 @@ The expansion is a string indicating the package has been disabled."
     (avy-action-copy-whole-line pt)
     (save-excursion (yank))
     t)
+
+  (setf (alist-get ?y avy-dispatch-alist) 'avy-action-yank
+	(alist-get ?w avy-dispatch-alist) 'avy-action-copy
+	(alist-get ?W avy-dispatch-alist) 'avy-action-copy-whole-line
+	(alist-get ?Y avy-dispatch-alist) 'avy-action-yank-whole-line)
+
+  (defun avy-action-teleport-whole-line (pt)
+    (avy-action-kill-whole-line pt)
+    (save-excursion (yank)) t)
+
+  (setf (alist-get ?t avy-dispatch-alist) 'avy-action-teleport
+	(alist-get ?T avy-dispatch-alist) 'avy-action-teleport-whole-line)
+
+  (defun avy-action-mark-to-char (pt)
+    (activate-mark)
+    (goto-char pt))
+
+  (setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char)
   )
 
 ;;;; Magit for git repositories
@@ -617,18 +666,6 @@ The expansion is a string indicating the package has been disabled."
 
 ;;; init.el ends here
 ;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(auctex which-key)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 ;; Local Variables:
 ;; outline-regexp: ";;;\\(;* [^ \t\n]\\|###autoload\\)"
 ;; outline-blank-line: t

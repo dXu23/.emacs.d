@@ -516,11 +516,22 @@ The expansion is a string indicating the package has been disabled."
     :ensure t
     :bind
     (("C-." . embark-act)
-     ))
+     ("C-;" . embark-dwim)
+     ("C-h B" . embark-bindings)
+     )
+    :hook (eldoc-documentation-functions . embark-eldoc-first-target)
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    (add-to-list 'display-buffer-alist
+		 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+		   nil
+		   (window-parameters (mode-line-format . none)))))
 
 ;;;; Avy for navigating text
 
 (elpaca-leaf avy
+  :after embark
   :bind
   ("C-:" . avy-goto-char)
   ("C-'" . avy-goto-char-2)
@@ -575,6 +586,17 @@ The expansion is a string indicating the package has been disabled."
     (goto-char pt))
 
   (setf (alist-get ?  avy-dispatch-alist) 'avy-action-mark-to-char)
+
+  (defun avy-action-embark (pt)
+    (unwind-protect
+	(save-excursion
+	  (goto-char pt)
+	  (embark-act))
+      (select-window
+       (cdr (ring-ref avy-ring 0))))
+    t)
+
+  (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark)
   )
 
 ;;;; Magit for git repositories
@@ -618,8 +640,14 @@ The expansion is a string indicating the package has been disabled."
   :custom
   `(org-roam-directory . ,(file-truename (expand-file-name "notes" org-directory)))
   (org-roam-completion-everywhere . t)
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry "* %<%I:%M %p>: %?"
+      :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   :config
+  (require 'org-roam-dailies)
   (org-roam-setup)
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
   :bind
   (("C-c n f" . org-roam-node-find)
    ("C-c n r" . org-roam-node-random)
@@ -629,7 +657,10 @@ The expansion is a string indicating the package has been disabled."
     ("C-c n o" . org-id-get-create)
     ("C-c n t" . org-roam-tag-add)
     ("C-c n a" . org-roam-alias-add)
-    ("C-c n l" . org-roam-buffer-toggle))))
+    ("C-c n l" . org-roam-buffer-toggle))
+   (:org-roam-dailies-map
+    ("Y" . org-roam-dailies-capture-yesterday)
+    ("T" . org-roam-dailies-capture-tomorrow))))
 
 
 (require 'org-settings)

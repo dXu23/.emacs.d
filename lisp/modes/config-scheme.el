@@ -1,7 +1,7 @@
 (require 'init-scheme)
 
 ;;;###autoload
-(defun my/scheme-hook ()
+(defun my/scheme-setup ()
   (prettify-symbols-mode)
   )
 

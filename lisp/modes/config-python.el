@@ -2,7 +2,7 @@
 
 
 ;;;###autoload
-(defun python-hook ()
+(defun my/python-setup ()
   (setq-default python-shell-interpreter "python3")
   (setq python-indent-guess-indent-offset-verbose nil)
-  (message "Python-hook loaded"))
+)

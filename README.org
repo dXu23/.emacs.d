@@ -42,7 +42,8 @@ the Emacs this config is meant for was compiled with:
  - ZLIB
 
 It might also be helpful to install the treesitter parser shared
-objects.
+objects via the [[https://github.com/casouri/tree-sitter-module][tree-sitter-module repo]], as well as any of your
+favorite language server protocols for eglot.
 
 ** FAQ
 *** Why use outline mode over org mode?

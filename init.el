@@ -640,14 +640,8 @@ The expansion is a string indicating the package has been disabled."
   :custom
   `(org-roam-directory . ,(file-truename (expand-file-name "notes" org-directory)))
   (org-roam-completion-everywhere . t)
-  (org-roam-dailies-capture-templates
-   '(("d" "default" entry "* %<%I:%M %p>: %?"
-      :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
   :config
-  (require 'org-roam-dailies)
   (org-roam-setup)
-  :bind-keymap
-  ("C-c n d" . org-roam-dailies-map)
   :bind
   (("C-c n f" . org-roam-node-find)
    ("C-c n r" . org-roam-node-random)
@@ -658,9 +652,7 @@ The expansion is a string indicating the package has been disabled."
     ("C-c n t" . org-roam-tag-add)
     ("C-c n a" . org-roam-alias-add)
     ("C-c n l" . org-roam-buffer-toggle))
-   (:org-roam-dailies-map
-    ("Y" . org-roam-dailies-capture-yesterday)
-    ("T" . org-roam-dailies-capture-tomorrow))))
+   ))
 
 
 (require 'org-settings)
